@@ -1,7 +1,8 @@
 Tutorial: https://www.youtube.com/watch?v=ugl7BcIfy9Q&list=PL1l5Nt_L9P7kRFNrqwbdlcKzE67CmgL3V
 tạo server video từ 16 -> 23
 
-Craete .env
+Create
+.env
 client:
 REACT_APP_G_CLIENT_ID=85072644177-q957blton9r79u393f8f840p9snd9oos.apps.googleusercontent.com
 server:
