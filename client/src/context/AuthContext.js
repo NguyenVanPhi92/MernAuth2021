@@ -7,7 +7,7 @@ const INITIAL_STATE = {
     token: ''
 }
 
-// tạo context và gán state là giá trị khởi tạo
+// tạo context (store) và gán state là giá trị khởi tạo
 export const AuthContext = createContext(INITIAL_STATE)
 
 // Context wrapper App: App sẽ là children
@@ -17,10 +17,11 @@ export const AuthContextProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
+            // đưa các state dùng chung ra phạm vi global (all app đều dùng đc state này)
             value={{
-                user: state.user,
-                isLoggedIn: state.isLoggedIn,
-                token: state.token,
+                user: state.user, // lưu info user
+                isLoggedIn: state.isLoggedIn, // check user đã login chưa
+                token: state.token, // lưu token cho phép user hoạt động
                 dispatch
             }}
         >

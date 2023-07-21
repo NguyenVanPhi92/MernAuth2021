@@ -1,6 +1,8 @@
 // upload image to cloudinary
 const cloudinary = require('cloudinary')
-const fs = require('fs')
+const fs = require('fs') // (File System) là một module tích hợp sẵn trong Node.js: đọc tệp, ghi tệp, xóa tệp tin,Thao tác với thư mục
+
+// dùng cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUD_DR_NAME,
     api_key: process.env.CLOUD_DR_API_KEY,

@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 const { google } = require('googleapis')
+const { COOKIE_NAME } = require('../helpers/contansts')
 const { OAuth2 } = google.auth
 
 const userController = {
@@ -75,7 +76,7 @@ const userController = {
             })
             await newUser.save()
 
-            // activation success
+            //when check email activation success
             res.status(200).json({ msg: 'Your account has been activated, you can now sign in.' })
         } catch (err) {
             res.status(500).json({ msg: err.message })
@@ -99,9 +100,10 @@ const userController = {
 
             // refresh token => tạo lại token cho user sau khi login => thời hạn 24h
             const rf_token = createToken.refresh({ id: user._id })
-            res.cookie('_apprftoken', rf_token, {
-                httpOnly: true,
-                path: '/api/auth/access',
+            // set token vào cookie
+            res.cookie(COOKIE_NAME, rf_token, {
+                httpOnly: true, // chỉ cho phép trình duyệt gửi cookie này trong các yêu cầu HTTP và không thể truy cập hoặc đọc từ JavaScript trong trang web
+                path: '/api/auth/access', // cho phép đường dẫn truy cập
                 maxAge: 24 * 60 * 60 * 1000 // 24h
             })
 
@@ -116,7 +118,7 @@ const userController = {
     access: async (req, res) => {
         try {
             // lấy ra token của user login đã lưu vào cookies
-            const rf_token = req.cookies._apprftoken
+            const rf_token = req.cookies.COOKIE_NAME
             if (!rf_token) return res.status(400).json({ msg: 'Please sign in.' })
 
             // validate token
@@ -132,7 +134,7 @@ const userController = {
         }
     },
 
-    // gửi email forgot password
+    // gửi email forgot password...
     forgot: async (req, res) => {
         try {
             // get email
@@ -158,7 +160,7 @@ const userController = {
         }
     },
 
-    //sau khi gửi email thì reset lại password
+    //...sau khi gửi email thì reset đặt lại password
     reset: async (req, res) => {
         try {
             // get password
@@ -210,7 +212,7 @@ const userController = {
     signout: async (req, res) => {
         try {
             // clear cookie
-            res.clearCookie('_apprftoken', { path: '/api/auth/access' })
+            res.clearCookie(COOKIE_NAME, { path: '/api/auth/access' })
             // success
             return res.status(200).json({ msg: 'Signout success.' })
         } catch (err) {
@@ -225,11 +227,11 @@ const userController = {
             const { tokenId } = req.body
 
             //sau đó xác thực Token Id Client
-            const client = new OAuth2(process.env.G_CLIENT_ID)
+            const client = new OAuth2(process.env.GOOGLE_CLIENT_ID)
             // xác minh user
             const verify = await client.verifyIdToken({
                 idToken: tokenId,
-                audience: process.env.G_CLIENT_ID
+                audience: process.env.GOOGLE_CLIENT_ID
             })
 
             // get data => lấy ra data user từ google login
@@ -246,7 +248,7 @@ const userController = {
                 console.log(user)
                 const rf_token = createToken.refresh({ id: user._id })
                 //lưu vào store cookie
-                res.cookie('_apprftoken', rf_token, {
+                res.cookie(COOKIE_NAME, rf_token, {
                     httpOnly: true,
                     path: '/api/auth/access',
                     maxAge: 24 * 60 * 60 * 1000 // 24hrs
@@ -254,7 +256,7 @@ const userController = {
                 res.status(200).json({ msg: 'Signing with Google success.' })
             } else {
                 // new user / create user
-                const password = email + process.env.G_CLIENT_ID
+                const password = email + process.env.GOOGLE_CLIENT_ID
                 const salt = await bcrypt.genSalt()
                 const hashPassword = await bcrypt.hash(password, salt)
                 const newUser = new User({
@@ -268,7 +270,7 @@ const userController = {
                 // refresh token
                 const rf_token = createToken.refresh({ id: user._id })
                 // store cookie
-                res.cookie('_apprftoken', rf_token, {
+                res.cookie(COOKIE_NAME, rf_token, {
                     httpOnly: true,
                     path: '/api/auth/access',
                     maxAge: 24 * 60 * 60 * 1000 // 24hrs

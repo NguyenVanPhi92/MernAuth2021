@@ -21,9 +21,8 @@ const Login = () => {
     const [visible, setVisible] = useState(false)
     const [data, setData] = useState(initialState)
     const { email, password } = data
+    // useContext: dùng để sd Context Api
     const { dispatch } = useContext(AuthContext)
-
-    console.log('g_id: ', process.env.REACT_APP_G_CLIENT_ID)
 
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value })

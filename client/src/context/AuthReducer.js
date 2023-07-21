@@ -1,4 +1,4 @@
-// tạo reducer
+// tạo reducer các case action
 
 const AuthReducer = (state, action) => {
     switch (action.type) {

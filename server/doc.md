@@ -7,5 +7,5 @@
     "googleapis": login với gòogle và gửi email,
     "jsonwebtoken": jwt,
     "mongoose": ,
-    "multer": file
-    "nodemailer": hửi email
+    "multer": middleware upload file từ form trong ứng dụng web.
+    "nodemailer": gửi email
