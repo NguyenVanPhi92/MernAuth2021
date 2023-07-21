@@ -1,5 +1,6 @@
 Tutorial: https://www.youtube.com/watch?v=ugl7BcIfy9Q&list=PL1l5Nt_L9P7kRFNrqwbdlcKzE67CmgL3V
 tạo server video từ 16 -> 23
+Current Video 18
 
 Create
 .env
@@ -20,3 +21,5 @@ ADMIN_EMAIL=ryoyoung212@gmail.com
 CLOUD_DR_NAME=dh9eghpuy
 CLOUD_DR_API_KEY=937882296612411
 CLOUD_DR_API_SECRET_KEY=nEZf-oUO_HxlGJGoPs0bKWiqw6A
+
+concurrently: giup chay nhiue lenh cung mot luc
