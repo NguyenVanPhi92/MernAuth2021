@@ -1,1 +1,5 @@
-export const COOKIE_NAME = '_apprftoken'
+const CookieKey = {
+    REFRESH_TOKEN: '_apprftoken'
+}
+
+module.exports = CookieKey

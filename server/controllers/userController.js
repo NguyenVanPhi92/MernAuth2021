@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 const { google } = require('googleapis')
-const { COOKIE_NAME } = require('../helpers/contansts')
+// const { '_apprftoken' } = require('../helpers/contansts')
 const { OAuth2 } = google.auth
 
 const userController = {
@@ -101,7 +101,7 @@ const userController = {
             // refresh token => tạo lại token cho user sau khi login => thời hạn 24h
             const rf_token = createToken.refresh({ id: user._id })
             // set token vào cookie
-            res.cookie(COOKIE_NAME, rf_token, {
+            res.cookie('_apprftoken', rf_token, {
                 httpOnly: true, // chỉ cho phép trình duyệt gửi cookie này trong các yêu cầu HTTP và không thể truy cập hoặc đọc từ JavaScript trong trang web
                 path: '/api/auth/access', // cho phép đường dẫn truy cập
                 maxAge: 24 * 60 * 60 * 1000 // 24h
@@ -116,9 +116,10 @@ const userController = {
 
     //sau khi đang nhập thì tạo quyền truy cập cho user
     access: async (req, res) => {
+        console.log(' req.cookies ', req.cookies)
         try {
             // lấy ra token của user login đã lưu vào cookies
-            const rf_token = req.cookies.COOKIE_NAME
+            const rf_token = req.cookies._apprftoken
             if (!rf_token) return res.status(400).json({ msg: 'Please sign in.' })
 
             // validate token
@@ -212,7 +213,7 @@ const userController = {
     signout: async (req, res) => {
         try {
             // clear cookie
-            res.clearCookie(COOKIE_NAME, { path: '/api/auth/access' })
+            res.clearCookie('_apprftoken', { path: '/api/auth/access' })
             // success
             return res.status(200).json({ msg: 'Signout success.' })
         } catch (err) {
@@ -248,7 +249,7 @@ const userController = {
                 console.log(user)
                 const rf_token = createToken.refresh({ id: user._id })
                 //lưu vào store cookie
-                res.cookie(COOKIE_NAME, rf_token, {
+                res.cookie('_apprftoken', rf_token, {
                     httpOnly: true,
                     path: '/api/auth/access',
                     maxAge: 24 * 60 * 60 * 1000 // 24hrs
@@ -270,7 +271,7 @@ const userController = {
                 // refresh token
                 const rf_token = createToken.refresh({ id: user._id })
                 // store cookie
-                res.cookie(COOKIE_NAME, rf_token, {
+                res.cookie('_apprftoken', rf_token, {
                     httpOnly: true,
                     path: '/api/auth/access',
                     maxAge: 24 * 60 * 60 * 1000 // 24hrs

@@ -11,6 +11,7 @@ cloudinary.config({
 
 const uploadController = {
     uploadAvar: async (req, res) => {
+        console.log('file ', req.file)
         try {
             // get file
             const file = req.file
